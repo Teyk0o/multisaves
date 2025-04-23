@@ -35,8 +35,6 @@ MultiSaves.launch = function() {
         setTimeout(function() {
             if (typeof MultiSaves.init === 'function') {
                 MultiSaves.init();
-            } else {
-                console.error("MultiSaves.init n'est pas disponible après le chargement du core.js");
             }
         }, 1000);
 
