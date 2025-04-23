@@ -682,6 +682,3 @@ MultiSaves.init = function() {
 if (CCSE.ConfirmGameVersion(MultiSaves.name, MultiSaves.version, MultiSaves.GameVersion)) {
     Game.registerMod(MultiSaves.name, MultiSaves);
 }
-
-// Initialisation
-MultiSaves.init();

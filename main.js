@@ -31,6 +31,15 @@ MultiSaves.launch = function() {
         // Chargement du fichier core avec cache-busting
         Game.LoadMod(MultiSaves.coreUrl + "?v=" + MultiSaves.version + "&game=" + MultiSaves.GameVersion + "&t=" + Date.now());
 
+        // Attendre que le script soit chargé (par exemple avec un setTimeout)
+        setTimeout(function() {
+            if (typeof MultiSaves.init === 'function') {
+                MultiSaves.init();
+            } else {
+                console.error("MultiSaves.init n'est pas disponible après le chargement du core.js");
+            }
+        }, 1000);
+
         // Configuration des vérifications périodiques de mise à jour
         setInterval(function() {
             MultiSaves.checkForUpdate();
