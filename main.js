@@ -5,40 +5,40 @@ if (typeof CCSE == 'undefined') Game.LoadMod('https://raw.githack.com/Teyk0o/bet
 
 var MultiSaves = {};
 MultiSaves.name = 'Multiple Saves Manager';
-MultiSaves.version = '1.0.0'; // Version initiale avec format sémantique
+MultiSaves.version = '0.0.0';
 MultiSaves.GameVersion = '2.048';
 
-// URL du GitHub où est hébergé ton mod
-MultiSaves.repoOwner = 'Teyk0o'; // Remplace par ton nom d'utilisateur GitHub
-MultiSaves.repoName = 'multisaves'; // Remplace par le nom de ton dépôt
+// GitHub URL where the mod is hosted
+MultiSaves.repoOwner = 'Teyk0o';
+MultiSaves.repoName = 'multisaves';
 
-// URL pour vérifier les dernières versions
+// URL to check for latest versions
 MultiSaves.apiUrl = "https://api.github.com/repos/" + MultiSaves.repoOwner + "/" + MultiSaves.repoName + "/tags";
 
-// URL du fichier principal
+// URL for the main file
 MultiSaves.coreUrl = "https://raw.githack.com/" + MultiSaves.repoOwner + "/" + MultiSaves.repoName + "/master/core.js";
 
-// Pour le suivi des mises à jour
+// For update tracking
 MultiSaves.lastCheck = 0;
-MultiSaves.checkInterval = 1000 * 60 * 60; // Vérification toutes les heures
+MultiSaves.checkInterval = 1000 * 60 * 60; // Check every hour
 MultiSaves.isFirstLaunch = true;
 
 MultiSaves.launch = function() {
-    // Vérification de la version actuelle depuis GitHub
+    // Check current version from GitHub
     MultiSaves.getCurrentVersion(() => {
-        console.log("MultiSaves: Chargement de la version " + MultiSaves.version);
+        console.log("MultiSaves: Loading version " + MultiSaves.version);
 
-        // Chargement du fichier core avec cache-busting
+        // Load the core file with cache-busting
         Game.LoadMod(MultiSaves.coreUrl + "?v=" + MultiSaves.version + "&game=" + MultiSaves.GameVersion + "&t=" + Date.now());
 
-        // Attendre que le script soit chargé (par exemple avec un setTimeout)
+        // Wait for the script to load (using setTimeout)
         setTimeout(function() {
             if (typeof MultiSaves.init === 'function') {
                 MultiSaves.init();
             }
         }, 1000);
 
-        // Configuration des vérifications périodiques de mise à jour
+        // Set up periodic update checks
         setInterval(function() {
             MultiSaves.checkForUpdate();
         }, MultiSaves.checkInterval);
@@ -46,30 +46,30 @@ MultiSaves.launch = function() {
 };
 
 MultiSaves.getCurrentVersion = function(callback) {
-    // Récupération de la dernière version depuis GitHub
+    // Get the latest version from GitHub
     fetch(MultiSaves.apiUrl)
         .then(response => {
             if (!response.ok) {
-                throw new Error("Impossible d'obtenir la version actuelle: " + response.status);
+                throw new Error("Unable to get current version: " + response.status);
             }
             return response.json();
         })
         .then(tags => {
             if (tags && tags.length > 0) {
-                // Récupération du dernier tag (premier dans la liste) et définition comme version actuelle
+                // Get the latest tag (first in the list) and set it as current version
                 MultiSaves.version = tags[0].name.replace('v', '');
-                console.log("MultiSaves: La version actuelle est " + MultiSaves.version);
+                console.log("MultiSaves: The current version is " + MultiSaves.version);
             }
             if (callback) callback();
         })
         .catch(error => {
-            console.error("MultiSaves: Erreur lors de la récupération de la version:", error);
+            console.error("MultiSaves: Error retrieving version:", error);
             if (callback) callback();
         });
 };
 
 MultiSaves.checkForUpdate = function() {
-    // Ignorer la première vérification après l'initialisation puisqu'on vient de récupérer la version
+    // Skip first check after initialization since we just got the version
     if (MultiSaves.isFirstLaunch) {
         MultiSaves.isFirstLaunch = false;
         MultiSaves.lastCheck = Date.now();
@@ -78,50 +78,50 @@ MultiSaves.checkForUpdate = function() {
 
     const now = Date.now();
 
-    // Vérifier uniquement si l'intervalle minimum est passé
+    // Only check if minimum interval has passed
     if (now - MultiSaves.lastCheck < MultiSaves.checkInterval) return;
 
     MultiSaves.lastCheck = now;
 
-    // Vérification de l'API GitHub pour le dernier tag
+    // Check GitHub API for latest tag
     fetch(MultiSaves.apiUrl)
         .then(response => {
             if (!response.ok) {
-                throw new Error("Impossible de vérifier les mises à jour: " + response.status);
+                throw new Error("Unable to check for updates: " + response.status);
             }
             return response.json();
         })
         .then(tags => {
             if (tags && tags.length > 0) {
-                // Récupération du dernier tag (premier dans la liste)
+                // Get latest tag (first in the list)
                 const latestTag = tags[0].name.replace('v', '');
 
-                // Comparaison avec la version actuelle
+                // Compare with current version
                 if (latestTag !== MultiSaves.version) {
-                    console.log(`MultiSaves: Nouvelle version disponible (${latestTag})`);
+                    console.log(`MultiSaves: New version available (${latestTag})`);
                     MultiSaves.notifyUpdate(latestTag);
                 } else {
-                    console.log("MultiSaves: Déjà sur la dernière version");
+                    console.log("MultiSaves: Already on latest version");
                 }
             }
         })
         .catch(error => {
-            console.error("MultiSaves: Erreur lors de la vérification des mises à jour:", error);
+            console.error("MultiSaves: Error checking for updates:", error);
         });
 };
 
 MultiSaves.notifyUpdate = function(newVersion) {
-    // Affichage d'une notification à l'utilisateur
+    // Show notification to the user
     Game.Notify(
-        "Mise à jour disponible",
-        `La version ${newVersion} du gestionnaire de sauvegardes est disponible. Rafraîchissez le jeu pour mettre à jour (CTRL+R ou CMD+R).`,
+        "Update Available",
+        `Version ${newVersion} of the Multiple Saves Manager is available. Refresh the game to update (CTRL+R or CMD+R).`,
         [16, 5],
-        10, // Durée plus longue pour que l'utilisateur ait le temps de voir
-        true // Notification fixe qui reste jusqu'à ce qu'on clique dessus
+        10, // Longer duration so user has time to see it
+        true // Sticky notification that stays until clicked
     );
 };
 
-// Lancement du mod quand CCSE est chargé
+// Launch the mod when CCSE is loaded
 if (!MultiSaves.initialized) {
     if (CCSE && CCSE.isLoaded) {
         MultiSaves.launch();

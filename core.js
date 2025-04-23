@@ -1,23 +1,23 @@
 /**
- * Multiple Saves Manager - Un mod pour Cookie Clicker
+ * Multiple Saves Manager - A mod for Cookie Clicker
  * © 2025 Teyk0o
  *
- * Ce travail est sous licence CC BY-NC-SA 4.0
+ * This work is licensed under CC BY-NC-SA 4.0
  * https://creativecommons.org/licenses/by-nc-sa/4.0/
  */
 
 if(MultiSaves === undefined) var MultiSaves = {};
-if(typeof CCSE == 'undefined') Game.LoadMod('https://raw.githack.com/Teyk0o/better-autoclicker/master/CCSE/main.js');
+if(typeof CCSE == 'undefined') Game.LoadMod('https://raw.githack.com/Teyk0o/multisaves/master/CCSE/main.js');
 
-// Fonction d'initialisation principale
+// Main initialization function
 MultiSaves.init = function() {
     MultiSaves.isLoaded = 1;
     MultiSaves.Backup = {};
     MultiSaves.autoSaveInterval = null;
 
-    console.log("MultiSaves: Chargé");
+    console.log("MultiSaves: Loaded");
 
-    // Fonctions utilitaires
+    // Utility functions
     MultiSaves.getSavedGames = function() {
         const saves = localStorage.getItem('ccMultiSaves');
         return saves ? JSON.parse(saves) : {};
@@ -67,26 +67,26 @@ MultiSaves.init = function() {
                 // Update in local storage
                 const saves = MultiSaves.getSavedGames();
                 if (saves[currentSaveId]) {
-                    // Mise à jour des données de sauvegarde
+                    // Update save data
                     saves[currentSaveId].data = saveData;
                     saves[currentSaveId].timestamp = Date.now();
 
-                    // Important : mettre à jour les informations affichées
+                    // Important: update displayed information
                     saves[currentSaveId].cookies = Game.cookies;
                     saves[currentSaveId].cookiesPs = Game.cookiesPs;
 
                     localStorage.setItem('ccMultiSaves', JSON.stringify(saves));
                     console.log("MultiSaves: Auto-saved current game");
 
-                    // Si le menu des options est ouvert, forcer sa mise à jour
+                    // If the options menu is open, force an update
                     if (Game.onMenu === 'prefs') {
                         Game.UpdateMenu();
                     }
 
-                    Game.Notify('Auto-save', 'Partie sauvegardée automatiquement.', [16, 5], 1);
+                    Game.Notify('Auto-save', 'Game auto-saved successfully.', [16, 5], 1);
                 }
             }
-        }, 60000); // 60 secondes
+        }, 60000); // 60 seconds
     };
 
     // Function to create a custom prompt dialog (alternative to prompt)
@@ -153,7 +153,7 @@ MultiSaves.init = function() {
 
         var cancelButton = document.createElement('a');
         cancelButton.className = 'option smallFancyButton';
-        cancelButton.textContent = 'Annuler';
+        cancelButton.textContent = 'Cancel';
         cancelButton.style.minWidth = '80px';
         cancelButton.style.textAlign = 'center';
 
@@ -237,13 +237,13 @@ MultiSaves.init = function() {
 
         var confirmButton = document.createElement('a');
         confirmButton.className = 'option smallFancyButton';
-        confirmButton.textContent = 'Oui';
+        confirmButton.textContent = 'Yes';
         confirmButton.style.minWidth = '80px';
         confirmButton.style.textAlign = 'center';
 
         var cancelButton = document.createElement('a');
         cancelButton.className = 'option smallFancyButton';
-        cancelButton.textContent = 'Non';
+        cancelButton.textContent = 'No';
         cancelButton.style.minWidth = '80px';
         cancelButton.style.textAlign = 'center';
 
@@ -271,7 +271,7 @@ MultiSaves.init = function() {
 
     // Main functions modified to use custom dialogs
     MultiSaves.createNewSave = function() {
-        MultiSaves.createCustomPrompt('Entrez un nom pour cette sauvegarde:', '', function(saveName) {
+        MultiSaves.createCustomPrompt('Enter a name for this save:', '', function(saveName) {
             if (!saveName) return;
 
             // Generate a unique ID
@@ -295,7 +295,7 @@ MultiSaves.init = function() {
             MultiSaves.setCurrentSaveId(saveId);
 
             // Notification and update
-            Game.Notify('Sauvegarde créée', `La sauvegarde "${saveName}" a été créée avec succès.`, [16, 5]);
+            Game.Notify('Save created', `The save "${saveName}" has been created successfully.`, [16, 5]);
             Game.UpdateMenu();
 
             // Start auto-save
@@ -307,7 +307,7 @@ MultiSaves.init = function() {
         const currentSaveId = MultiSaves.getCurrentSaveId();
 
         if (!currentSaveId) {
-            Game.Notify('Erreur', 'Aucune sauvegarde active.', [16, 5], 4);
+            Game.Notify('Error', 'No active save.', [16, 5], 4);
             return;
         }
 
@@ -317,7 +317,7 @@ MultiSaves.init = function() {
         // Update in local storage
         const saves = MultiSaves.getSavedGames();
         if (!saves[currentSaveId]) {
-            Game.Notify('Erreur', 'Sauvegarde active non trouvée.', [16, 5], 4);
+            Game.Notify('Error', 'Active save not found.', [16, 5], 4);
             return;
         }
 
@@ -327,7 +327,7 @@ MultiSaves.init = function() {
         saves[currentSaveId].cookiesPs = Game.cookiesPs;
         localStorage.setItem('ccMultiSaves', JSON.stringify(saves));
 
-        Game.Notify('Sauvegarde mise à jour', `La sauvegarde "${saves[currentSaveId].name}" a été mise à jour.`, [16, 5]);
+        Game.Notify('Save updated', `The save "${saves[currentSaveId].name}" has been updated.`, [16, 5]);
         Game.UpdateMenu();
     };
 
@@ -335,7 +335,7 @@ MultiSaves.init = function() {
         const saves = MultiSaves.getSavedGames();
 
         if (!saves[saveId]) {
-            Game.Notify('Erreur', 'Sauvegarde non trouvée.', [16, 5], 4);
+            Game.Notify('Error', 'Save not found.', [16, 5], 4);
             return;
         }
 
@@ -356,7 +356,7 @@ MultiSaves.init = function() {
         // Set this save as the current one
         MultiSaves.setCurrentSaveId(saveId);
 
-        Game.Notify('Sauvegarde chargée', `La sauvegarde "${saves[saveId].name}" a été chargée.`, [16, 5]);
+        Game.Notify('Save loaded', `The save "${saves[saveId].name}" has been loaded.`, [16, 5]);
         Game.UpdateMenu();
 
         // Start auto-save
@@ -367,17 +367,17 @@ MultiSaves.init = function() {
         const saves = MultiSaves.getSavedGames();
 
         if (!saves[saveId]) {
-            Game.Notify('Erreur', 'Sauvegarde non trouvée.', [16, 5], 4);
+            Game.Notify('Error', 'Save not found.', [16, 5], 4);
             return;
         }
 
-        MultiSaves.createCustomPrompt('Nouveau nom pour cette sauvegarde:', saves[saveId].name, function(newName) {
+        MultiSaves.createCustomPrompt('New name for this save:', saves[saveId].name, function(newName) {
             if (!newName) return;
 
             saves[saveId].name = newName;
             localStorage.setItem('ccMultiSaves', JSON.stringify(saves));
 
-            Game.Notify('Sauvegarde renommée', `La sauvegarde a été renommée en "${newName}".`, [16, 5]);
+            Game.Notify('Save renamed', `The save has been renamed to "${newName}".`, [16, 5]);
             Game.UpdateMenu();
         });
     };
@@ -386,13 +386,13 @@ MultiSaves.init = function() {
         const saves = MultiSaves.getSavedGames();
 
         if (!saves[saveId]) {
-            Game.Notify('Erreur', 'Sauvegarde non trouvée.', [16, 5], 4);
+            Game.Notify('Error', 'Save not found.', [16, 5], 4);
             return;
         }
 
         const saveName = saves[saveId].name;
 
-        MultiSaves.createCustomConfirm(`Êtes-vous sûr de vouloir supprimer la sauvegarde "${saveName}"?`, function(confirmed) {
+        MultiSaves.createCustomConfirm(`Are you sure you want to delete the save "${saveName}"?`, function(confirmed) {
             if (!confirmed) return;
 
             // Delete the save
@@ -410,7 +410,7 @@ MultiSaves.init = function() {
                 }
             }
 
-            Game.Notify('Sauvegarde supprimée', `La sauvegarde "${saveName}" a été supprimée.`, [16, 5]);
+            Game.Notify('Save deleted', `The save "${saveName}" has been deleted.`, [16, 5]);
             Game.UpdateMenu();
         });
     };
@@ -476,7 +476,7 @@ MultiSaves.init = function() {
 
             var newSaveButton = document.createElement('a');
             newSaveButton.className = 'option smallFancyButton';
-            newSaveButton.textContent = 'Nouvelle sauvegarde';
+            newSaveButton.textContent = 'New Save';
             newSaveButton.onclick = function() {
                 MultiSaves.createNewSave();
                 PlaySound('snd/tick.mp3');
@@ -485,7 +485,7 @@ MultiSaves.init = function() {
 
             var updateButton = document.createElement('a');
             updateButton.className = 'option smallFancyButton';
-            updateButton.textContent = 'Mettre à jour';
+            updateButton.textContent = 'Update';
             updateButton.onclick = function() {
                 MultiSaves.updateCurrentSave();
                 PlaySound('snd/tick.mp3');
@@ -499,7 +499,7 @@ MultiSaves.init = function() {
             explanationDiv.style.color = 'rgba(255,255,255,0.5)';
             explanationDiv.style.borderBottom = '1px dashed rgba(255,255,255,0.25)';
             explanationDiv.style.padding = '2px 8px';
-            explanationDiv.innerText = 'Ce mod vous permet de créer plusieurs sauvegardes de jeu. Vous pouvez avoir différentes sauvegardes pour différentes parties ou stratégies.';
+            explanationDiv.innerText = 'This mod allows you to create multiple game saves. You can have different saves for different playthroughs or strategies.';
             buttonsDiv.appendChild(explanationDiv);
 
             containerDiv.appendChild(buttonsDiv);
@@ -509,8 +509,8 @@ MultiSaves.init = function() {
             // Subtitle for available saves
             var savesTitle = document.createElement('div');
             savesTitle.className = 'title';
-            savesTitle.textContent = 'Sauvegardes disponibles';
-            savesTitle.innerHTML += '<span style="font-size: 10px; color: rgba(255,255,255,0.5);"> - La sauvegarde active sera automatiquement mise à jour toutes les 60 secondes.</span>';
+            savesTitle.textContent = 'Available Saves';
+            savesTitle.innerHTML += '<span style="font-size: 10px; color: rgba(255,255,255,0.5);"> - The active save will be automatically updated every 60 seconds.</span>';
             saveManagerBox.appendChild(savesTitle);
 
             // List of saves
@@ -521,7 +521,7 @@ MultiSaves.init = function() {
             if (saveIds.length === 0) {
                 var noSavesDiv = document.createElement('div');
                 noSavesDiv.className = 'listing';
-                noSavesDiv.textContent = 'Aucune sauvegarde trouvée.';
+                noSavesDiv.textContent = 'No saves found.';
                 saveManagerBox.appendChild(noSavesDiv);
             } else {
                 for (var i = 0; i < saveIds.length; i++) {
@@ -533,8 +533,8 @@ MultiSaves.init = function() {
                     var formattedDate = date.toLocaleString();
 
                     // Extract save information - using stored values when available
-                    var cookies = "Inconnu";
-                    var cps = "Inconnu";
+                    var cookies = "Unknown";
+                    var cps = "Unknown";
 
                     // Use cookies and CPS stored in our save data when available
                     if (save.cookies !== undefined) {
@@ -554,12 +554,12 @@ MultiSaves.init = function() {
                     }
 
                     // Fallback to parsing the save data
-                    if (cookies === "Inconnu" || cps === "Inconnu") {
+                    if (cookies === "Unknown" || cps === "Unknown") {
                         try {
                             var decodedSave = save.data.split("!END!")[0];
                             var gameData = decodedSave.split("|");
                             if (gameData.length > 2) {
-                                if (cookies === "Inconnu") {
+                                if (cookies === "Unknown") {
                                     if (typeof Beautify === 'function') {
                                         cookies = Beautify(Number(gameData[2]));
                                     } else {
@@ -567,7 +567,7 @@ MultiSaves.init = function() {
                                     }
                                 }
 
-                                if (cps === "Inconnu" && gameData[5]) {
+                                if (cps === "Unknown" && gameData[5]) {
                                     if (typeof Beautify === 'function') {
                                         cps = Beautify(Number(gameData[5])) + '/s';
                                     } else {
@@ -607,7 +607,7 @@ MultiSaves.init = function() {
                     infoDiv.style.color = '#999';
                     infoDiv.style.marginBottom = '8px';
                     infoDiv.innerHTML = `ID: ${id.substring(0, 8)}...<br>` +
-                        `Créée le: ${formattedDate}<br>` +
+                        `Created: ${formattedDate}<br>` +
                         `Cookies: ${cookies}<br>` +
                         `Production: ${cps}`;
                     saveItemDiv.appendChild(infoDiv);
@@ -619,7 +619,7 @@ MultiSaves.init = function() {
 
                     var loadButton = document.createElement('a');
                     loadButton.className = 'option smallFancyButton';
-                    loadButton.textContent = 'Charger';
+                    loadButton.textContent = 'Load';
                     loadButton.onclick = (function(saveId) {
                         return function() {
                             MultiSaves.loadSave(saveId);
@@ -630,7 +630,7 @@ MultiSaves.init = function() {
 
                     var renameButton = document.createElement('a');
                     renameButton.className = 'option smallFancyButton';
-                    renameButton.textContent = 'Renommer';
+                    renameButton.textContent = 'Rename';
                     renameButton.onclick = (function(saveId) {
                         return function() {
                             MultiSaves.renameSave(saveId);
@@ -641,7 +641,7 @@ MultiSaves.init = function() {
 
                     var deleteButton = document.createElement('a');
                     deleteButton.className = 'option smallFancyButton';
-                    deleteButton.textContent = 'Supprimer';
+                    deleteButton.textContent = 'Delete';
                     deleteButton.onclick = (function(saveId) {
                         return function() {
                             MultiSaves.deleteSave(saveId);
@@ -671,8 +671,8 @@ MultiSaves.init = function() {
 
         // Initialization notification
         Game.Notify(
-            'MultiSaves chargé',
-            'Gérez facilement plusieurs sauvegardes dans les options du jeu.',
+            'MultiSaves loaded',
+            'Easily manage multiple saves in the game options.',
             [16, 5]
         );
     }, 1000);
