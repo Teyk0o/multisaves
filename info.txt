@@ -1,0 +1,12 @@
+{
+	"Name": "Multiple Saves Manager",
+	"ID": "multisaves",
+	"Author": "Teyk0o",
+	"Description": "Permet de gérer plusieurs sauvegardes différentes dans Cookie Clicker. Créez, chargez et basculez entre plusieurs parties sans perdre votre progression.",
+	"ModVersion": 1.0,
+	"GameVersion": 2.048,
+	"Date": "23/04/2025",
+	"Dependencies": [],
+	"Disabled": 0,
+	"AllowSteamAchievs": 1
+}
