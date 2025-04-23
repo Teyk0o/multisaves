@@ -1,0 +1,64 @@
+# OS specific files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor directories and files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependencies
+node_modules/
+bower_components/
+
+# Build outputs
+dist/
+build/
+out/
+
+# Debug files
+debug/
+.debug
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Backup files
+*.bak
+*.backup
+*.old
+*.orig
+
+# Temporary files
+*.tmp
+temp/
+.temp
+
+# Project specific
+# Add any Cookie Clicker specific patterns here if needed
+# For example, local test files or configuration that shouldn't be shared
+
+# Documentation build files
+docs/build/
+
+# Package files
+*.zip
+*.tar.gz
+
+# Personal notes
+notes.md
+TODO.md
