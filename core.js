@@ -460,7 +460,7 @@ MultiSaves.init = function() {
             versionInfo.style.color = '#999';
             versionInfo.style.textAlign = 'right';
             versionInfo.style.marginBottom = '8px';
-            versionInfo.textContent = 'v' + MultiSaves.version;
+            versionInfo.textContent = 'MultiSaves v' + MultiSaves.version;
             saveManagerBox.appendChild(versionInfo);
 
             // Explanation text and buttons container
@@ -675,7 +675,7 @@ MultiSaves.init = function() {
             'Easily manage multiple saves in the game options.',
             [16, 5]
         );
-    }, 1000);
+    }, 50);
 };
 
 // CCSE configuration function

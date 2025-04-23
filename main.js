@@ -36,7 +36,7 @@ MultiSaves.launch = function() {
             if (typeof MultiSaves.init === 'function') {
                 MultiSaves.init();
             }
-        }, 1000);
+        }, 200);
 
         // Set up periodic update checks
         setInterval(function() {
