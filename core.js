@@ -460,7 +460,7 @@ MultiSaves.init = function() {
             versionInfo.style.color = '#999';
             versionInfo.style.textAlign = 'right';
             versionInfo.style.marginBottom = '8px';
-            versionInfo.textContent = 'MultiSaves v' + MultiSaves.version;
+            versionInfo.textContent = 'MultiSaves v' + MultiSaves.version + (parseFloat(MultiSaves.version) < 1.0 ? ' BETA' : '');
             saveManagerBox.appendChild(versionInfo);
 
             // Explanation text and buttons container
